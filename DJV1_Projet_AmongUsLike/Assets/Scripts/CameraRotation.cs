@@ -20,7 +20,7 @@ public class CameraRotation : MonoBehaviour
     private void Update()
     {
         Vector2 input = _mouseMove.ReadValue<Vector2>();
-        _verticalRotation = (_verticalRotation - input.y * verticalRotationSpeed * Time.deltaTime) % 360;
+        _verticalRotation = Mathf.Clamp(_verticalRotation - input.y * verticalRotationSpeed * Time.deltaTime, -30, 60);
 
         transform.localRotation = Quaternion.AngleAxis(_verticalRotation, Vector3.right);
     }
