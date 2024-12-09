@@ -13,7 +13,7 @@ public class EnemyBehaviour : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        _hasArrived = false;
+        _hasArrived = true;
     }
 
     private void Update()
@@ -23,7 +23,10 @@ public class EnemyBehaviour : MonoBehaviour
             StartCoroutine(DestinationReached());
             _hasArrived = true;
         }
-        else if (_hasArrived && agent.remainingDistance > agent.stoppingDistance) _hasArrived = false;
+        else if (_hasArrived && agent.remainingDistance > agent.stoppingDistance)
+        {
+            _hasArrived = false;
+        }
     }
 
     private IEnumerator DestinationReached()
