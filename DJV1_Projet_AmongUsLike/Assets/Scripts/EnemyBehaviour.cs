@@ -10,6 +10,8 @@ public class EnemyBehaviour : MonoBehaviour
     public NavMeshAgent agent;
     public UnityAction TaskCompleted;
 
+    public bool isImposter;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -20,6 +22,10 @@ public class EnemyBehaviour : MonoBehaviour
     {
         if (agent.remainingDistance <= agent.stoppingDistance && !_hasArrived)
         {
+            if (isImposter)
+            {
+                Debug.Log("Je suis imposteur : " + name);
+            }
             StartCoroutine(DestinationReached());
             _hasArrived = true;
         }

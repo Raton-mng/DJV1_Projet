@@ -11,15 +11,28 @@ public class EnemiesManager : MonoBehaviour
     private int _enemiesNumber;
     private int _tasksDone;
     
+    private static int _numberOfImposter;
+    [SerializeField] private int numberOfImposterWanted = 2;
+    
     void Start()
     {
+        _numberOfImposter = 0;
         _gr = GameResources.Instance;
         EnemyBehaviour[] enemiesTab = GetComponentsInChildren<EnemyBehaviour>();
-        foreach (EnemyBehaviour enemy in enemiesTab)
-        {
-            enemy.TaskCompleted += OnTaskCompleted;
-        }
         _enemiesNumber = enemiesTab.Length;
+
+        int parcoursCpt;
+        for (parcoursCpt = _enemiesNumber - 1; parcoursCpt >= 0; parcoursCpt--)
+        {
+            if (Random.Range(0, parcoursCpt + 1) < numberOfImposterWanted - _numberOfImposter)
+            {
+                enemiesTab[parcoursCpt].isImposter = true;
+                _numberOfImposter++;
+            }
+            else enemiesTab[parcoursCpt].isImposter = false;
+            enemiesTab[parcoursCpt].TaskCompleted += OnTaskCompleted;
+        }
+        
         _tasksDone = 0;
         
         _enemies = new HashSet<EnemyBehaviour>(enemiesTab);
