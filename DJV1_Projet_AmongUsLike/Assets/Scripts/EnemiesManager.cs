@@ -16,6 +16,7 @@ public class EnemiesManager : MonoBehaviour
     
     private static int _numberOfImposter;
     [SerializeField] private int numberOfImposterWanted = 2;
+    [SerializeField] private Canvas victoryScreen;
 
     private void Awake()
     {
@@ -109,5 +110,17 @@ public class EnemiesManager : MonoBehaviour
         _enemies.Remove(enemy);
         _enemiesNumber -= 1;
         if (enemy.isImposter) _numberOfImposter -= 1;
+
+        if (_numberOfImposter == 0)
+        {
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+            victoryScreen.gameObject.SetActive(true);
+        }
+
+        if ((_enemiesNumber / 2) <= _numberOfImposter)
+        {
+            
+        }
     }
 }

@@ -74,7 +74,7 @@ public class EnemyBehaviour : MonoBehaviour
         _hasKilled = true;
     }
 
-    private void Die()
+    public void Die()
     {
         _enemiesManager.SomeoneDied(this);
         Debug.Log("i died : " + gameObject);
