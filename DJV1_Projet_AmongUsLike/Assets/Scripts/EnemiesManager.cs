@@ -17,6 +17,7 @@ public class EnemiesManager : MonoBehaviour
     private static int _numberOfImposter;
     [SerializeField] private int numberOfImposterWanted = 2;
     [SerializeField] private Canvas victoryScreen;
+    [SerializeField] private Canvas failScreen;
 
     private void Awake()
     {
@@ -37,7 +38,6 @@ public class EnemiesManager : MonoBehaviour
                 _numberOfImposter++;
             }
             else enemiesTab[parcoursCpt].isImposter = false;
-            enemiesTab[parcoursCpt].TaskCompleted += OnTaskCompleted;
         }
         
         _tasksDone = 0;
@@ -72,6 +72,9 @@ public class EnemiesManager : MonoBehaviour
                  numberPresentAtTask++)
             {
                 EnemyBehaviour enemy = SelectNewEnemy(nonSelectedEnemies);
+                enemy.hasArrived = false;
+                enemy.hasKilled = false;
+                enemy.hasFinishedTask = false;
                 enemy.agent.SetDestination(destination);
             }
         }
@@ -84,7 +87,7 @@ public class EnemiesManager : MonoBehaviour
         return newEnemy;
     }
 
-    private void OnTaskCompleted()
+    public void TaskCompleted()
     {
         _tasksDone += 1;
         Debug.Log(_tasksDone);
@@ -93,6 +96,11 @@ public class EnemiesManager : MonoBehaviour
             Dispatch();
             _tasksDone = 0;
         }
+    }
+
+    public void TaskCanceled()
+    {
+        _tasksDone -= 1;
     }
 
     public EnemyBehaviour GetCloseCrewmate(Rooms localRoom)
@@ -118,9 +126,11 @@ public class EnemiesManager : MonoBehaviour
             victoryScreen.gameObject.SetActive(true);
         }
 
-        if ((_enemiesNumber / 2) <= _numberOfImposter)
+        if ((_enemiesNumber + 2) / 2 <= _numberOfImposter)
         {
-            
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+            failScreen.gameObject.SetActive(true); 
         }
     }
 }

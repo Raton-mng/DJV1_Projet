@@ -9,20 +9,20 @@ public class EnemyBehaviour : MonoBehaviour
     [SerializeField] private float taskTimer = 2f;
     private EnemiesManager _enemiesManager;
     
-    private bool _hasKilled;
-    private bool _hasArrived;
+    public bool hasKilled;
+    public bool hasArrived;
+    public bool hasFinishedTask;
     public Rooms currentRoom;
     
     public NavMeshAgent agent;
-    
-    public UnityAction TaskCompleted;
 
     public bool isImposter;
 
     private void Awake()
     {
-        _hasKilled = false;
-        _hasArrived = true;
+        hasKilled = false;
+        hasArrived = true;
+        hasFinishedTask = false;
         
         currentRoom = Rooms.Cafet;
         
@@ -38,22 +38,16 @@ public class EnemyBehaviour : MonoBehaviour
     {
         if (agent.remainingDistance <= agent.stoppingDistance)
         {
-            if (isImposter && !_hasKilled && PlayerControl.CurrentRoom != currentRoom && !GameResources.Instance.GetNeighbours(currentRoom).Contains(PlayerControl.CurrentRoom))
+            if (isImposter && !hasKilled && PlayerControl.CurrentRoom != currentRoom && !GameResources.Instance.GetNeighbours(currentRoom).Contains(PlayerControl.CurrentRoom))
             {
-                Debug.Log("Je suis imposteur : " + name + "; Je suis en " + currentRoom);
                 Kill();
             }
 
-            if (!_hasArrived)
+            if (!hasArrived)
             {
                 StartCoroutine(DestinationReached());
-                _hasArrived = true;
+                hasArrived = true;
             }
-        }
-        else if (_hasArrived && agent.remainingDistance > agent.stoppingDistance)
-        {
-            _hasArrived = false;
-            _hasKilled = false;
         }
     }
 
@@ -61,7 +55,8 @@ public class EnemyBehaviour : MonoBehaviour
     {
         yield return new WaitForSeconds(taskTimer);
         Debug.Log("I finished : " + gameObject);
-        TaskCompleted.Invoke();
+        _enemiesManager.TaskCompleted();
+        hasFinishedTask = true;
     }
 
     private void Kill()
@@ -71,13 +66,13 @@ public class EnemyBehaviour : MonoBehaviour
         if (target) target.Die();
         //si target est null, la cible n'est pas encore arrivée ou a deja ete tuee
         
-        _hasKilled = true;
+        hasKilled = true;
     }
 
     public void Die()
     {
+        if (hasFinishedTask) _enemiesManager.TaskCanceled();
         _enemiesManager.SomeoneDied(this);
-        Debug.Log("i died : " + gameObject);
         gameObject.SetActive(false);
     }
 }
