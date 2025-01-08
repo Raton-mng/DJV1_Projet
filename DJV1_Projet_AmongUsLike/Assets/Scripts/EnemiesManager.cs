@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -5,6 +6,8 @@ using Random = UnityEngine.Random;
 
 public class EnemiesManager : MonoBehaviour
 {
+    public static EnemiesManager Instance;
+    
     private GameResources _gr;
     
     private HashSet<EnemyBehaviour> _enemies;
@@ -13,11 +16,14 @@ public class EnemiesManager : MonoBehaviour
     
     private static int _numberOfImposter;
     [SerializeField] private int numberOfImposterWanted = 2;
-    
-    void Start()
+
+    private void Awake()
     {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+        
         _numberOfImposter = 0;
-        _gr = GameResources.Instance;
+        
         EnemyBehaviour[] enemiesTab = GetComponentsInChildren<EnemyBehaviour>();
         _enemiesNumber = enemiesTab.Length;
 
@@ -36,29 +42,17 @@ public class EnemiesManager : MonoBehaviour
         _tasksDone = 0;
         
         _enemies = new HashSet<EnemyBehaviour>(enemiesTab);
+    }
+
+    void Start()
+    {
+        _gr = GameResources.Instance;
         
         Dispatch();
     }
     
     private void Dispatch()
     {
-        /*Vector3 pos1, pos2, pos3;
-        (pos1, pos2, pos3) = SelectDestinations();
-        foreach (EnemyBehaviour enemy in _enemies)
-        {
-            switch (Random.Range(0, 3))
-            {
-                case 0 :
-                    enemy.agent.SetDestination(pos1);
-                    break;
-                case 1 :
-                    enemy.agent.SetDestination(pos2);
-                    break;
-                default:
-                    enemy.agent.SetDestination(pos3);
-                    break;
-            }
-        }*/
 
         HashSet<EnemyBehaviour> nonSelectedEnemies = new HashSet<EnemyBehaviour>(_enemies);
         HashSet<Vector3> destinations = new HashSet<Vector3>();
@@ -82,20 +76,6 @@ public class EnemiesManager : MonoBehaviour
         }
     }
 
-    /*private (Vector3, Vector3, Vector3) SelectDestinations()
-    {
-        Vector3 pos1, pos2, pos3;
-        pos1 = _gr.GetRandomTask().position;
-        
-        do pos2 = _gr.GetRandomTask().position;
-        while (pos2 == pos1);
-        
-        do pos3 = _gr.GetRandomTask().position;
-        while (pos3 == pos1 || pos3 == pos2);
-
-        return (pos1, pos2, pos3);
-    }*/
-
     private EnemyBehaviour SelectNewEnemy(HashSet<EnemyBehaviour> nonSelectedEnemies)
     {
         EnemyBehaviour newEnemy = nonSelectedEnemies.ElementAt(Random.Range(0, nonSelectedEnemies.Count));
@@ -106,10 +86,28 @@ public class EnemiesManager : MonoBehaviour
     private void OnTaskCompleted()
     {
         _tasksDone += 1;
+        Debug.Log(_tasksDone);
         if (_tasksDone == _enemiesNumber)
         {
             Dispatch();
             _tasksDone = 0;
         }
+    }
+
+    public EnemyBehaviour GetCloseCrewmate(Rooms localRoom)
+    {
+        foreach (EnemyBehaviour enemy in _enemies)
+        {
+            if (!enemy.isImposter && enemy.currentRoom == localRoom) return enemy;
+        }
+        
+        return null;
+    }
+
+    public void SomeoneDied(EnemyBehaviour enemy)
+    {
+        _enemies.Remove(enemy);
+        _enemiesNumber -= 1;
+        if (enemy.isImposter) _numberOfImposter -= 1;
     }
 }

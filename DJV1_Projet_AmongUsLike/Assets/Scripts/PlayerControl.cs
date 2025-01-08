@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,6 +5,8 @@ public class PlayerControl : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotationSpeed;
+
+    public static Rooms CurrentRoom;
     
     private InputAction _playerMove;
     private InputAction _mouseMove;
@@ -15,6 +16,8 @@ public class PlayerControl : MonoBehaviour
 
     private void Awake()
     {
+        CurrentRoom = Rooms.Cafet;
+        
         PlayerInput plInput = GetComponent<PlayerInput>();
         _playerMove = plInput.actions["Move"];
         _mouseMove = plInput.actions["Look"];
