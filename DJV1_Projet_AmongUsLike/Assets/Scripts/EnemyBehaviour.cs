@@ -18,6 +18,9 @@ public class EnemyBehaviour : MonoBehaviour
 
     public bool isImposter;
 
+    [SerializeField] private Corpse corpse;
+    [SerializeField] private MeshRenderer myRenderer;
+
     private void Awake()
     {
         hasKilled = false;
@@ -54,7 +57,6 @@ public class EnemyBehaviour : MonoBehaviour
     private IEnumerator DestinationReached()
     {
         yield return new WaitForSeconds(taskTimer);
-        Debug.Log("I finished : " + gameObject);
         _enemiesManager.TaskCompleted();
         hasFinishedTask = true;
     }
@@ -74,5 +76,9 @@ public class EnemyBehaviour : MonoBehaviour
         if (hasFinishedTask) _enemiesManager.TaskCanceled();
         _enemiesManager.SomeoneDied(this);
         gameObject.SetActive(false);
+
+        Corpse myCorpse = Instantiate(corpse, transform.position, transform.rotation);
+        myCorpse.gameObject.SetActive(true);
+        myCorpse.meshRenderer.material.color = myRenderer.material.color;
     }
 }

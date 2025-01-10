@@ -90,7 +90,6 @@ public class EnemiesManager : MonoBehaviour
     public void TaskCompleted()
     {
         _tasksDone += 1;
-        Debug.Log(_tasksDone);
         if (_tasksDone == _enemiesNumber)
         {
             Dispatch();
