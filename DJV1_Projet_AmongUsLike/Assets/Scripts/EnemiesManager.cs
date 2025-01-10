@@ -72,10 +72,10 @@ public class EnemiesManager : MonoBehaviour
                  numberPresentAtTask++)
             {
                 EnemyBehaviour enemy = SelectNewEnemy(nonSelectedEnemies);
+                enemy.agent.SetDestination(destination);
                 enemy.hasArrived = false;
                 enemy.hasKilled = false;
                 enemy.hasFinishedTask = false;
-                enemy.agent.SetDestination(destination);
             }
         }
     }

@@ -8,7 +8,8 @@ public class EnemyBehaviour : MonoBehaviour
 {
     [SerializeField] private float taskTimer = 2f;
     private EnemiesManager _enemiesManager;
-    
+
+    private bool _waitForFirstUpdate;
     public bool hasKilled;
     public bool hasArrived;
     public bool hasFinishedTask;
@@ -23,6 +24,7 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void Awake()
     {
+        _waitForFirstUpdate = false;
         hasKilled = false;
         hasArrived = true;
         hasFinishedTask = false;
@@ -46,12 +48,13 @@ public class EnemyBehaviour : MonoBehaviour
                 Kill();
             }
 
-            if (!hasArrived)
+            if (!hasArrived && _waitForFirstUpdate)
             {
                 StartCoroutine(DestinationReached());
                 hasArrived = true;
             }
         }
+        else if (!_waitForFirstUpdate) _waitForFirstUpdate = true;
     }
 
     private IEnumerator DestinationReached()

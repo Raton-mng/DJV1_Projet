@@ -11320,6 +11320,7 @@ Transform:
   - {fileID: 1776368733}
   - {fileID: 695767585}
   - {fileID: 394844301}
+  - {fileID: 1860978378}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1265735861
@@ -15190,7 +15191,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1265735860}
     m_Modifications:
     - target: {fileID: 121238179023437330, guid: 991ca5b9265ca9f438db255e63a1f99a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15198,7 +15199,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 121238179023437330, guid: 991ca5b9265ca9f438db255e63a1f99a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.4
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 121238179023437330, guid: 991ca5b9265ca9f438db255e63a1f99a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -16184,6 +16185,11 @@ Transform:
   - {fileID: 1207820896}
   m_Father: {fileID: 1931707864}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1860978378 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 121238179023437330, guid: 991ca5b9265ca9f438db255e63a1f99a, type: 3}
+  m_PrefabInstance: {fileID: 1803799224}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1860978379 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3790516532391046089, guid: 991ca5b9265ca9f438db255e63a1f99a, type: 3}
@@ -19124,6 +19130,5 @@ SceneRoots:
   - {fileID: 828945706}
   - {fileID: 1931707864}
   - {fileID: 1265735860}
-  - {fileID: 1803799224}
   - {fileID: 1259706345}
   - {fileID: 1264281861}
