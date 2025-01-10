@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class CallMeeting : MonoBehaviour
@@ -10,8 +11,11 @@ public class CallMeeting : MonoBehaviour
 
     [SerializeField] private Canvas meetingUI;
 
+    public static UnityEvent MeetingTriggered;
+
     private void Awake()
     {
+        MeetingTriggered = new UnityEvent();
         _isInside = false;
         _call = plInput.actions["CallMeeting"];
     }
@@ -20,6 +24,7 @@ public class CallMeeting : MonoBehaviour
     {
         if (_call.WasPerformedThisFrame() && _isInside)
         {
+            MeetingTriggered.Invoke();
             Time.timeScale = 0;
             Cursor.lockState = CursorLockMode.None;
             meetingUI.gameObject.SetActive(true);
